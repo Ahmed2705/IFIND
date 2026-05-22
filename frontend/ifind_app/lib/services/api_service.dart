@@ -9,7 +9,7 @@ import 'package:ifind_app/services/storage_service.dart';
 // Use the VS Code launch configs in .vscode/launch.json to switch easily.
 const String baseUrl = String.fromEnvironment(
   'BASE_URL',
-  defaultValue: 'http://172.20.10.2:8000',
+  defaultValue: 'http://192.168.100.194:8000',
 );
 
 class ApiService {
@@ -347,14 +347,21 @@ class ApiService {
   }
 
   /// GET /items/search?keywords=X&district=Y&category=Z
-  /// All query params are optional. Returns matching items, or empty list on failure.
-  Future<List<Map<String, dynamic>>> searchItems({
+  /// Returns {success, data, error}. On invalid district the backend returns 422
+  /// with a human-readable detail message which is surfaced here.
+  Future<Map<String, dynamic>> searchItems({
     String? keywords,
     String? district,
     String? category,
   }) async {
     final token = await StorageService().getToken();
-    if (token == null) return [];
+    if (token == null) {
+      return {
+        'success': false,
+        'data': <Map<String, dynamic>>[],
+        'error': 'Not authenticated.'
+      };
+    }
     try {
       final queryParams = <String, String>{};
       if (keywords != null) queryParams['keywords'] = keywords;
@@ -368,9 +375,30 @@ class ApiService {
       );
       final raw = response.data;
       final data = (raw is String ? jsonDecode(raw) : raw) as List<dynamic>;
-      return data.cast<Map<String, dynamic>>();
+      return {'success': true, 'data': data.cast<Map<String, dynamic>>()};
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final data = e.response!.data;
+        final detail = (data is Map)
+            ? (data['detail'] ?? 'Search failed')
+            : 'Search failed';
+        return {
+          'success': false,
+          'data': <Map<String, dynamic>>[],
+          'error': detail.toString()
+        };
+      }
+      return {
+        'success': false,
+        'data': <Map<String, dynamic>>[],
+        'error': 'Cannot connect to server.'
+      };
     } catch (e) {
-      return [];
+      return {
+        'success': false,
+        'data': <Map<String, dynamic>>[],
+        'error': 'Something went wrong.'
+      };
     }
   }
 
@@ -387,7 +415,7 @@ class ApiService {
       final raw = response.data;
       final data =
           (raw is String ? jsonDecode(raw) : raw) as Map<String, dynamic>;
-      return data['username'] as String?;
+      return data['full_name'] as String?;
     } catch (e) {
       return null;
     }
