@@ -68,11 +68,15 @@ Both regression tests now pass successfully.
 
 ## 4. Overall Results
 
-- Grading tests: 9/9 passed.
-- Fee calculation tests: 6/6 passed.
-- Total passing tests across both runs: 15/15.
-- Ruff: All checks passed in both runs.
-- Pylint: 10.00/10 in both final runs.
+| Metric | Final Result |
+|---|---|
+| Grading tests | 11/11 passed |
+| Fee calculation tests | 6/6 passed |
+| Total tests | 17/17 passed |
+| Execution time | 0.07 seconds |
+| Ruff issues | 0 |
+| Pylint issues | 0 |
+| Pylint score | 10.00/10 |
 
 ## 5. Conclusion
 
@@ -83,3 +87,13 @@ The scholarship discount bug in the constructed example
 was successfully identified and corrected.
 
 All 15 tested cases passed after refactoring.
+
+## 6. Pairing Reflection
+
+We collaborated on improving the grading system and
+covering missing test cases. My partner contributed
+additional tests for invalid grade inputs. Testing
+helped us identify incorrect behavior and verify
+the refactored code. This exercise demonstrated
+the importance of collaboration, code quality,
+and automated testing.
