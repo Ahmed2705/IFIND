@@ -1,28 +1,24 @@
+"""Unit tests for grade calculation."""
+
+import pytest
+
 from grades import calculate_grade
 
-def test_excellent_grade():
-    assert calculate_grade(95) == "A"
 
-def test_good_grade():
-    assert calculate_grade(85) == "B"
-
-def test_average_grade():
-    assert calculate_grade(75) == "C"
-
-def test_passing_grade():
-    assert calculate_grade(65) == "D"
-
-def test_failing_grade():
-    assert calculate_grade(45) == "F"
-
-def test_maximum_grade():
-    assert calculate_grade(100) == "A"
-
-def test_minimum_grade():
-    assert calculate_grade(0) == "F"
-
-def test_passing_boundary():
-    assert calculate_grade(60) == "D"
-
-def test_failing_boundary():
-    assert calculate_grade(59) == "F"
+@pytest.mark.parametrize(
+    "score, expected",
+    [
+        (95, "A"),
+        (85, "B"),
+        (75, "C"),
+        (65, "D"),
+        (45, "F"),
+        (100, "A"),
+        (0, "F"),
+        (60, "D"),
+        (59, "F"),
+    ],
+)
+def test_calculate_grade(score, expected):
+    """Verify correct letter grades for valid scores."""
+    assert calculate_grade(score) == expected
