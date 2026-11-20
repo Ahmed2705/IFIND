@@ -1,13 +1,18 @@
+"""Calculate letter grades from numerical scores."""
+
+
 def calculate_grade(score):
+    """Return the letter grade for a score between 0 and 100."""
     if score < 0 or score > 100:
         raise ValueError("Invalid grade")
-    elif score >= 90:
+
+    if score >= 90:
         return "A"
-    elif score >= 80:
+    if score >= 80:
         return "B"
-    elif score >= 70:
+    if score >= 70:
         return "C"
-    elif score >= 60:
+    if score >= 60:
         return "D"
-    else:
-        return "F"
+
+    return "F"
