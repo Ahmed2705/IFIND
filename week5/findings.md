@@ -1,37 +1,52 @@
-# Week 5 - Code Quality Findings
+## 4. Fee Calculation Findings
 
-## 1. Static Analysis Results
+### Static Analysis
 
-- Ruff: 1 issue detected.
-- Pylint: 15 issues detected.
-- Pylint score: 5.16/10.
-- Pytest: 9 out of 9 tests passed.
+- Ruff: All checks passed.
+- Pylint: 5 issues detected.
+- Pylint score: 2.86/10.
 
-## 2. Findings Table
+| Code | Issue | Occurrences |
+|---|---|---|
+| C0304 | Missing final newline | 1 |
+| C0114 | Missing module docstring | 1 |
+| C0116 | Missing function docstring | 1 |
+| C0121 | Unnecessary boolean comparison | 2 |
 
-| Tool | Code | Issue | Occurrences | Proposed Fix |
-|---|---|---|---|---|
-| Ruff | I001 | Incorrect import formatting | 1 | Organize imports |
-| Pylint | C0304 | Missing final newline | 2 | Add final newlines |
-| Pylint | C0114 | Missing module docstring | 2 | Add module descriptions |
-| Pylint | C0116 | Missing function docstring | 10 | Document each function |
-| Pylint | R1720 | Unnecessary elif after raise | 1 | Replace elif with if |
+### Code Smells
 
-## 3. Additional Code Smells
+- Hardcoded fee, discount and penalty values.
+- Unnecessary comparisons with True.
+- Missing documentation.
+- Magic numbers.
 
-- Magic numbers: Grade boundaries are hardcoded.
-- Repetitive test code: Similar test functions could
-  be simplified using parameterized tests.
-- Incomplete test coverage: Invalid scores below 0
-  and above 100 are not currently tested.
+## 5. Hidden Bug
 
-## 4. Hidden Bug
+The scholarship discount is incorrectly calculated
+as 10% instead of the intended 20%.
 
-Pending analysis of the original fees.py implementation.
+### Root Cause
 
-## 5. Conclusion
+The discount multiplier is 0.10 instead of 0.20.
 
-Although all nine unit tests passed, static analysis
-identified several maintainability and formatting issues.
-Refactoring should improve code readability and quality
-while preserving the expected behavior.
+### Test Evidence
+
+| Scenario | Expected | Actual | Result |
+|---|---|---|---|
+| Scholarship without penalty | 800 | 900 | FAILED |
+| Scholarship with penalty | 900 | 1000 | FAILED |
+
+### Test Results Before Bug Fix
+
+- Characterization tests: 4 passed.
+- Regression tests: 2 failed.
+- Execution time: 0.14 seconds.
+
+### Proposed Solution
+
+- Correct the scholarship discount to 20%.
+- Replace magic numbers with named constants.
+- Simplify boolean conditions.
+- Add appropriate documentation.
+- Update the outdated characterization expectations.
+- Rerun all tests and static analysis tools.
