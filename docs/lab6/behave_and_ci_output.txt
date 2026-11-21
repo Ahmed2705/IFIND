@@ -1,0 +1,16 @@
+$ python -m behave
+1 feature passed, 0 failed, 0 skipped
+7 scenarios passed, 0 failed, 0 skipped
+28 steps passed, 0 failed, 0 skipped
+
+$ python -m ruff check registration.py invoice.py tests features/steps
+All checks passed!
+
+$ python -m ruff check --select C901 --config "lint.mccabe.max-complexity=1" invoice.py
+All checks passed!
+
+$ python -m pytest -q
+10 passed in 0.08s
+
+Source: GitHub Actions "Lab 6 Python checks" successful run
+https://github.com/Ahmed2705/IFIND/actions/runs/44929184784
