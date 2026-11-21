@@ -11,6 +11,11 @@ class ScholarshipPolicy:
         return hours * FEE_PER_HOUR * 0.5
 
 
+class SiblingPolicy:
+    def fee(self, hours):
+        return hours * FEE_PER_HOUR * 0.75
+
+
 class InternationalPolicy:
     RATE = 2000
     SERVICE_FEE = 5000
@@ -22,6 +27,7 @@ class InternationalPolicy:
 POLICIES = {
     "regular": RegularPolicy(),
     "scholarship": ScholarshipPolicy(),
+    "sibling": SiblingPolicy(),
     "international": InternationalPolicy(),
 }
 
