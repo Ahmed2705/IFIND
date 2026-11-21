@@ -1,0 +1,34 @@
+name: Lab 6 Python checks
+
+on:
+  push:
+    branches: [week-6]
+    paths:
+      - "lab6/**"
+      - "docs/lab6/**"
+      - ".github/workflows/lab6.yml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lab6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install testing dependencies
+        run: python -m pip install pytest pytest-cov behave ruff
+      - name: Run pytest
+        run: python -m pytest -q
+      - name: Check registration coverage
+        run: python -m pytest --cov=registration --cov-report=term-missing --cov-fail-under=100
+      - name: Run Behave scenarios
+        run: python -m behave
+      - name: Lint lab code
+        run: python -m ruff check registration.py invoice.py tests features/steps
+      - name: Check invoice complexity
+        run: python -m ruff check --select C901 --config "lint.mccabe.max-complexity=1" invoice.py
